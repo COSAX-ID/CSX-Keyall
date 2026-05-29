@@ -1,0 +1,17 @@
+name: CSX-Keyall
+description: Auto Reward KeyAll Plugin with SQL Storage and Multi-Language.
+prefix: CSXID
+version: '1.0'
+
+main: dev.cosax.cSXKeyall.CSXKeyall
+api-version: '1.21'
+load: POSTWORLD
+
+authors: [ cosaxid ]
+website: cosax.id
+
+commands:
+  keyall:
+    description: Main command for CSX KeyAll
+    permission: op
+    usage: /keyall <info|reset|set-time|cmd|reload>

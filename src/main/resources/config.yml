@@ -1,0 +1,23 @@
+# ========================================================
+#                  CSX KeyAll Config
+# ========================================================
+
+# Active language file (Options: en, id)
+lang: "en"
+
+# Database Storage Settings
+# Supported types: H2 (modern local file), SQLITE (legacy local file), or MYSQL (external database server)
+database:
+  type: "H2"
+  host: "localhost"
+  port: 3306
+  name: "minecraft"
+  username: "root"
+  password: ""
+  ssl: false
+
+# KeyAll timer interval in milliseconds (3600000 ms = 1 hour)
+interval-millis: 3600000
+
+# List of console commands executed when the timer ends.
+commands-list: []
