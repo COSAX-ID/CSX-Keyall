@@ -1,72 +1,62 @@
-# CSX KeyAll 🗝️
+# CSX KeyAll
 
 <div align="center">
 
 ![CSX KeyAll](https://img.shields.io/badge/CSX-KeyAll-1.0.0-brightgreen?style=for-the-badge)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.x-orange?style=for-the-badge\&logo=minecraft)
 ![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge\&logo=openjdk)
-![License](https://img.shields.io/badge/License-Apache%202.0-blue?style=for-the-badge)
+![License](https://img.shields.io/github/license/COSAX-ID/CSX-Keyall?style=for-the-badge)
+![Platform](https://img.shields.io/badge/Platform-Paper%20%7C%20Purpur%20%7C%20Spigot-success?style=for-the-badge)
+![Database](https://img.shields.io/badge/Database-SQLite%20%7C%20MySQL-blue?style=for-the-badge)
 
-### High-performance automated KeyAll reward system for Minecraft servers
+### High-Performance Automated KeyAll System for Minecraft Servers
 
-Lightweight, modern, and database-safe reward scheduler built for Paper-based servers with multi-language support, countdown persistence, PlaceholderAPI integration, and optimized async handling.
+Lightweight, modern, and database-safe KeyAll scheduler designed for Paper-based Minecraft servers.
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Configuration](#️-configuration) • [Permissions](#-permissions) • [Commands](#-commands) • [Building](#️-building-from-source) • [Troubleshooting](#-troubleshooting) • [License](#-license)
+Built with asynchronous processing, PlaceholderAPI integration, multi-language support, countdown persistence, and optimized database handling.
+
+[Features](#-features) • [Requirements](#-requirements) • [Installation](#-installation) • [Configuration](#️-configuration) • [Commands](#-commands) • [Permissions](#-permissions) • [Building](#️-building-from-source) • [Troubleshooting](#-troubleshooting) • [License](#-license)
 
 </div>
 
 ---
 
-# 🌟 Features
+# ✨ Features
 
-<details>
-<summary><strong>Expand Features List</strong></summary>
+## ⏰ Automated Countdown System
 
----
+* Fully automated KeyAll execution
+* Persistent countdown storage
+* Crash-safe timer recovery
+* Millisecond precision timing
+* Manual execution support
 
-## ⏱️ Automated Reward System
+## 🗄 Database Support
 
-* Automated countdown scheduling system
-* Precise interval timing using milliseconds
-* Persistent countdown saving
-* Crash-safe timer restoration
-* Manual admin trigger support
+| Database    | Supported |
+| ----------- | --------- |
+| SQLite      | ✅         |
+| MySQL       | ✅         |
+| H2 (Legacy) | ✅         |
 
----
+### Database Features
 
-## 🗄️ Modern Database Layer
+* HikariCP Connection Pooling
+* Async Database Queries
+* Automatic Storage Detection
+* Smart Database Migration
+* H2 → SQLite Auto Conversion
 
-### Supported Storage Engines
+## 🌎 Localization
 
-| Database           | Support |
-| ------------------ | ------- |
-| SQLite             | ✅       |
-| MySQL              | ✅       |
-| H2 Legacy Fallback | ✅       |
+* Multi-language Support
+* Indonesian Language Included
+* English Language Included
+* Fully Customizable Messages
 
-### Features
+## 🔌 PlaceholderAPI Integration
 
-* HikariCP connection pooling
-* Smart storage bridge system
-* Async database operations
-* Paper-compatible SQLite handling
-* Automatic H2 → SQLite fallback conversion
-
----
-
-## 🎨 Customization & Localization
-
-* Multi-language support
-* Built-in Indonesian & English locale
-* Fully customizable messages
-* PlaceholderAPI integration
-* Async-safe scheduler system
-
----
-
-## 🔌 PlaceholderAPI Support
-
-Available placeholders:
+Available Placeholders:
 
 ```text
 %csxkeyall_time%
@@ -74,32 +64,30 @@ Available placeholders:
 %csxkeyall_minutes%
 ```
 
-Use placeholders on:
+Compatible With:
 
-* Scoreboards
 * TAB
+* Scoreboards
 * Holograms
 * ActionBars
 * BossBars
-
-</details>
 
 ---
 
 # 📋 Requirements
 
-| Requirement     | Version                 |
-| --------------- | ----------------------- |
-| Minecraft       | 1.21.x                  |
-| Java            | 21+                     |
-| Server Software | Paper / Purpur / Spigot |
-| Optional Plugin | PlaceholderAPI          |
+| Software       | Version   |
+| -------------- | --------- |
+| Minecraft      | 1.21.x    |
+| Java           | 21+       |
+| Paper          | Supported |
+| Purpur         | Supported |
+| Spigot         | Supported |
+| PlaceholderAPI | Optional  |
 
 ---
 
 # 📥 Installation
-
-## Quick Start
 
 ### 1. Download Plugin
 
@@ -109,23 +97,21 @@ Place:
 csx-keyall-1.0.jar
 ```
 
-into your server:
+inside:
 
 ```text
 /plugins/
 ```
 
----
-
 ### 2. Start Server
 
-Start the server once to generate:
+Start the server once.
+
+The plugin will automatically generate:
 
 ```text
 /plugins/CSX-Keyall/
 ```
-
----
 
 ### 3. Configure Plugin
 
@@ -135,18 +121,14 @@ Edit:
 config.yml
 ```
 
-Setup:
+Configure:
 
 * Database
-* Reward commands
+* Commands
 * Language
-* Countdown interval
+* Interval
 
----
-
-### 4. Reload Plugin
-
-Use:
+### 4. Reload
 
 ```bash
 /keyall reload
@@ -156,38 +138,12 @@ or restart the server.
 
 ---
 
-# 🚀 Usage
-
-## 👥 Player Commands
-
-| Command        | Description              |
-| -------------- | ------------------------ |
-| `/keyall info` | View remaining countdown |
-
----
-
-## 🛠️ Admin Features
-
-* Force execute KeyAll
-* Reset countdown
-* Reload configuration
-* Modify timer dynamically
-
----
-
 # ⚙️ Configuration
 
-## Example `config.yml`
+Example:
 
 ```yaml
-# ==================================================
-# CSX-KeyAll Configuration
-# ==================================================
-
 database:
-  # Supported:
-  # SQLITE
-  # MYSQL
   type: "SQLITE"
 
   host: "localhost"
@@ -199,15 +155,10 @@ database:
 
   ssl: false
 
-# Language file
-# lang/en.yml
-# lang/id.yml
 lang: "id"
 
-# 1 Hour = 3600000
 interval-millis: 3600000
 
-# Commands executed by console
 commands-list:
   - "crate giveall vote 1"
   - "bc &b&lCSXID &7» &aEveryone has received 1x Vote Key!"
@@ -215,46 +166,37 @@ commands-list:
 
 ---
 
+# 📖 Commands
+
+| Command               | Description              | Permission   |
+| --------------------- | ------------------------ | ------------ |
+| /keyall info          | View remaining countdown | keyall.use   |
+| /keyall reset         | Reset countdown          | keyall.admin |
+| /keyall set-time <ms> | Modify timer             | keyall.admin |
+| /keyall cmd           | Force execute KeyAll     | keyall.admin |
+| /keyall reload        | Reload configuration     | keyall.admin |
+
+---
+
 # 🔐 Permissions
 
-| Permission     | Default | Description           |
-| -------------- | ------- | --------------------- |
-| `keyall.use`   | true    | Access `/keyall info` |
-| `keyall.admin` | op      | Full admin access     |
+| Permission   | Default | Description            |
+| ------------ | ------- | ---------------------- |
+| keyall.use   | true    | Access player commands |
+| keyall.admin | op      | Access admin commands  |
 
 ---
 
-# 📜 Commands
+# 🛠️ Building From Source
 
-| Command                 | Description           | Permission     |
-| ----------------------- | --------------------- | -------------- |
-| `/keyall info`          | Show countdown info   | `keyall.use`   |
-| `/keyall reset`         | Reset timer           | `keyall.admin` |
-| `/keyall set-time <ms>` | Modify remaining time | `keyall.admin` |
-| `/keyall cmd`           | Force trigger KeyAll  | `keyall.admin` |
-| `/keyall reload`        | Reload plugin config  | `keyall.admin` |
-
----
-
-# 🏗️ Building from Source
-
-## Requirements
-
-* Java 21+
-* Maven 3.6+
-
----
-
-## Clone Repository
+### Clone Repository
 
 ```bash
-git clone https://github.com/minggudevv/CSX-Keyall.git
+git clone https://github.com/COSAX-ID/CSX-Keyall.git
 cd CSX-Keyall
 ```
 
----
-
-## Build Plugin
+### Build
 
 ```bash
 mvn clean package
@@ -268,108 +210,94 @@ target/csx-keyall-1.0-SNAPSHOT.jar
 
 ---
 
-# 📁 Project Structure
+# 📂 Project Structure
 
 ```text
-CSXKeyall/
-├── src/main/java/dev/cosax/csxkeyall/
-│   ├── CSXKeyall.java
-│   ├── DatabaseManager.java
-│   ├── CommandHandler.java
-│   ├── TimerTask.java
-│   └── config/
-│       ├── ConfigLoader.java
-│       └── LanguageManager.java
-│
-└── src/main/resources/
-    ├── plugin.yml
-    ├── config.yml
-    └── lang/
-        ├── en.yml
-        └── id.yml
+CSX-KeyAll/
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── dev/cosax/csxkeyall/
+│   │   └── resources/
+│   │       ├── plugin.yml
+│   │       ├── config.yml
+│   │       └── lang/
+│   │           ├── en.yml
+│   │           └── id.yml
+│   └── test/
+├── pom.xml
+└── README.md
 ```
 
 ---
 
-# 🐛 Troubleshooting
-
-## H2 Warning Appears
-
-### Problem
-
-Paper 1.20+ no longer bundles H2 database driver.
-
-### Solution
-
-CSX-KeyAll automatically converts H2 configurations into SQLite safely.
-
----
+# 🔧 Troubleshooting
 
 ## PlaceholderAPI Not Working
 
-### Problem
+Make sure:
 
-Placeholders return raw text.
+* PlaceholderAPI is installed
+* Server has been restarted
+* Expansions are loaded correctly
 
-### Solution
+## MySQL Connection Failed
 
-* Ensure PlaceholderAPI is installed
-* Reload expansions
-* Restart server if needed
+Check:
 
----
+* Host
+* Port
+* Username
+* Password
+* Firewall Settings
 
-## MySQL Timeout Issues
+## Countdown Reset After Restart
 
-### Problem
-
-Database connection becomes unstable.
-
-### Solution
-
-* Verify MySQL credentials
-* Check firewall port 3306
-* Ensure remote access is enabled
-
----
-
-# 📄 License
-
-Licensed under the Apache License 2.0.
+Ensure the plugin has permission to write data inside:
 
 ```text
-Copyright 2026 cosaxid
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-
-http://www.apache.org/licenses/LICENSE-2.0
+/plugins/CSX-KeyAll/
 ```
 
 ---
 
 # 👨‍💻 Credits
 
-## Development
+## Developed By
 
-| Role         | Information                   |
-| ------------ | ----------------------------- |
-| Author       | cosaxid                       |
-| Organization | COSAX.ID                      |
-| GitHub       | https://github.com/minggudevv |
+| Role           | Name      |
+| -------------- | --------- |
+| Organization   | COSAX.ID  |
+| Lead Developer | COSAXID   |
+| Developer      | minggudev |
+
+### GitHub
+
+* https://github.com/COSAX-ID
+* https://github.com/minggudevv
+
+---
+
+# 📜 License
+
+This project is licensed under the MIT License.
+
+For more information, see the [LICENSE](LICENSE) file.
 
 ---
 
 # ⭐ Support
 
-If you like this plugin, consider starring the repository on GitHub.
+If you enjoy using CSX KeyAll, please consider giving this repository a star.
 
-Made with ❤️ for the Minecraft community.
+Your support helps future development and maintenance.
 
 <div align="center">
 
-## ⬆ Back To Top
+Made with ❤️ by COSAX.ID
 
-[Click Here](#csx-keyall-️)
+### ⬆ Back To Top
+
+[Click Here](#csx-keyall)
 
 </div>
