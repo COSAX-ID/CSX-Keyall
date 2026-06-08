@@ -6,7 +6,7 @@
 lang: "en"
 
 # Database Storage Settings
-# Supported types: H2 (modern local file), SQLITE (legacy local file), or MYSQL (external database server)
+# Supported types: H2 (local file), SQLITE (legacy local file), or MYSQL (external database server)
 database:
   type: "H2"
   host: "localhost"

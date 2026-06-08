@@ -14,8 +14,8 @@ import java.sql.SQLException;
 public class DatabaseManager {
 
     private final CSXKeyall plugin;
-    private HikariDataSource dataSource; // Digunakan khusus MySQL
-    private Connection flatFileConnection; // Digunakan khusus SQLite lokal
+    private HikariDataSource dataSource;
+    private Connection h2Connection;
     private String type;
 
     public DatabaseManager(CSXKeyall plugin) {
@@ -27,11 +27,11 @@ public class DatabaseManager {
         ConfigurationSection dbSection = plugin.getConfig().getConfigurationSection("database");
         if (dbSection == null) return;
 
-        // Jika config diset ke H2, paksa alihkan ke SQLITE karena Paper modern tidak mendukung H2 bawaan
-        String rawType = dbSection.getString("type", "SQLITE").toUpperCase();
-        this.type = rawType.equals("H2") ? "SQLITE" : rawType;
+        String rawType = dbSection.getString("type", "H2").toUpperCase();
 
-        if (type.equals("MYSQL")) {
+        if (rawType.equals("MYSQL")) {
+            this.type = "MYSQL";
+
             HikariConfig config = new HikariConfig();
             config.setDriverClassName("com.mysql.cj.jdbc.Driver");
             config.setJdbcUrl("jdbc:mysql://" + dbSection.getString("host") + ":" + dbSection.getInt("port") + "/" + dbSection.getString("name"));
@@ -51,18 +51,18 @@ public class DatabaseManager {
 
             this.dataSource = new HikariDataSource(config);
         } else {
-            // Direct Connection via SQLite (100% didukung bawaan semua core Minecraft)
+            this.type = "H2";
+
             try {
-                Class.forName("org.sqlite.JDBC");
-                File dbFile = new File(plugin.getDataFolder(), "storage.db");
-                this.flatFileConnection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
+                Class.forName("org.h2.Driver");
+                File dbFile = new File(plugin.getDataFolder(), "storage");
+                this.h2Connection = DriverManager.getConnection("jdbc:h2:file:" + dbFile.getAbsolutePath() + ";MODE=MySQL");
             } catch (Exception e) {
-                plugin.getLogger().severe("Gagal memuat driver SQLite lokal: " + e.getMessage());
+                plugin.getLogger().severe("Gagal memuat driver H2 lokal: " + e.getMessage());
                 throw new RuntimeException(e);
             }
         }
 
-        // Buat tabel data
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(
                      "CREATE TABLE IF NOT EXISTS csx_keyall_data (" +
@@ -79,17 +79,16 @@ public class DatabaseManager {
         if (type.equals("MYSQL")) {
             return dataSource.getConnection();
         } else {
-            if (flatFileConnection == null || flatFileConnection.isClosed()) {
-                // Instansiasi ulang direct connection jika terputus
+            if (h2Connection == null || h2Connection.isClosed()) {
                 try {
-                    Class.forName("org.sqlite.JDBC");
-                    File dbFile = new File(plugin.getDataFolder(), "storage.db");
-                    this.flatFileConnection = DriverManager.getConnection("jdbc:sqlite:" + dbFile.getAbsolutePath());
+                    Class.forName("org.h2.Driver");
+                    File dbFile = new File(plugin.getDataFolder(), "storage");
+                    this.h2Connection = DriverManager.getConnection("jdbc:h2:file:" + dbFile.getAbsolutePath() + ";MODE=MySQL");
                 } catch (Exception e) {
-                    throw new SQLException("Gagal menyambung kembali ke SQLite: " + e.getMessage());
+                    throw new SQLException("Gagal menyambung kembali ke H2: " + e.getMessage());
                 }
             }
-            return flatFileConnection;
+            return h2Connection;
         }
     }
 
@@ -113,8 +112,7 @@ public class DatabaseManager {
         if (type.equals("MYSQL")) {
             query = "INSERT INTO csx_keyall_data (data_key, data_value) VALUES (?, ?) ON DUPLICATE KEY UPDATE data_value = ?";
         } else {
-            // Berlaku universal untuk SQLite (menggantikan MERGE INTO milik H2)
-            query = "INSERT OR REPLACE INTO csx_keyall_data (data_key, data_value) VALUES (?, ?)";
+            query = "MERGE INTO csx_keyall_data (data_key, data_value) KEY(data_key) VALUES (?, ?)";
         }
 
         try (Connection conn = getConnection();
@@ -135,8 +133,8 @@ public class DatabaseManager {
             if (dataSource != null && !dataSource.isClosed()) {
                 dataSource.close();
             }
-            if (flatFileConnection != null && !flatFileConnection.isClosed()) {
-                flatFileConnection.close();
+            if (h2Connection != null && !h2Connection.isClosed()) {
+                h2Connection.close();
             }
         } catch (SQLException ignored) {}
     }

@@ -2,12 +2,12 @@
 
 <div align="center">
 
-![CSX KeyAll](https://img.shields.io/badge/CSX-KeyAll-1.0.0-brightgreen?style=for-the-badge)
+![CSX KeyAll](https://img.shields.io/badge/CSX-KeyAll-1.0.1-brightgreen?style=for-the-badge)
 ![Minecraft](https://img.shields.io/badge/Minecraft-1.21.x-orange?style=for-the-badge\&logo=minecraft)
 ![Java](https://img.shields.io/badge/Java-21-red?style=for-the-badge\&logo=openjdk)
 ![License](https://img.shields.io/github/license/COSAX-ID/CSX-Keyall?style=for-the-badge)
 ![Platform](https://img.shields.io/badge/Platform-Paper%20%7C%20Purpur%20%7C%20Spigot-success?style=for-the-badge)
-![Database](https://img.shields.io/badge/Database-SQLite%20%7C%20MySQL-blue?style=for-the-badge)
+![Database](https://img.shields.io/badge/Database-H2%20%7C%20MySQL-blue?style=for-the-badge)
 
 ### High-Performance Automated KeyAll System for Minecraft Servers
 
@@ -35,17 +35,15 @@ Built with asynchronous processing, PlaceholderAPI integration, multi-language s
 
 | Database    | Supported |
 | ----------- | --------- |
-| SQLite      | ✅         |
+| H2          | ✅         |
 | MySQL       | ✅         |
-| H2 (Legacy) | ✅         |
 
 ### Database Features
 
-* HikariCP Connection Pooling
-* Async Database Queries
+* HikariCP Connection Pooling (MySQL)
+* H2 JDBC Native Driver
 * Automatic Storage Detection
-* Smart Database Migration
-* H2 → SQLite Auto Conversion
+* Countdown Persistence Across Restarts
 
 ## 🌎 Localization
 
@@ -94,7 +92,7 @@ Compatible With:
 Place:
 
 ```text
-csx-keyall-1.0.jar
+csx-keyall-1.0.1.jar
 ```
 
 inside:
@@ -144,7 +142,7 @@ Example:
 
 ```yaml
 database:
-  type: "SQLITE"
+  type: "H2"
 
   host: "localhost"
   port: 3306
@@ -205,7 +203,7 @@ mvn clean package
 Output:
 
 ```text
-target/csx-keyall-1.0-SNAPSHOT.jar
+target/csx-keyall-1.0.1.jar
 ```
 
 ---
@@ -214,17 +212,18 @@ target/csx-keyall-1.0-SNAPSHOT.jar
 
 ```text
 CSX-KeyAll/
+├── changelog/
+│   └── 1.0.1.md
 ├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── dev/cosax/csxkeyall/
-│   │   └── resources/
-│   │       ├── plugin.yml
-│   │       ├── config.yml
-│   │       └── lang/
-│   │           ├── en.yml
-│   │           └── id.yml
-│   └── test/
+│   └── main/
+│       ├── java/
+│       │   └── dev/cosax/csxkeyall/
+│       └── resources/
+│           ├── plugin.yml
+│           ├── config.yml
+│           └── lang/
+│               ├── en.yml
+│               └── id.yml
 ├── pom.xml
 └── README.md
 ```
