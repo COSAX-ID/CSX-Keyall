@@ -14,9 +14,20 @@ public class CSXKeyall extends JavaPlugin {
 
     private long nextKeyallTime;
     private long intervalMillis;
-    private BukkitTask keyallTask;
+    private Object keyallTask;
     private FileConfiguration langConfig;
     private DatabaseManager dbManager;
+
+    private static boolean isFolia;
+
+    static {
+        try {
+            Class.forName("io.papermc.paper.threadedregions.RegionizedServer");
+            isFolia = true;
+        } catch (ClassNotFoundException ignored) {
+            isFolia = false;
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -40,7 +51,11 @@ public class CSXKeyall extends JavaPlugin {
     @Override
     public void onDisable() {
         if (keyallTask != null) {
-            keyallTask.cancel();
+            if (isFolia) {
+                FoliaHelper.cancelTask(keyallTask);
+            } else if (keyallTask instanceof BukkitTask) {
+                ((BukkitTask) keyallTask).cancel();
+            }
         }
         if (dbManager != null) {
             dbManager.saveData("next_keyall_time", nextKeyallTime);
@@ -86,14 +101,24 @@ public class CSXKeyall extends JavaPlugin {
 
     private void startTimer() {
         if (keyallTask != null) {
-            keyallTask.cancel();
+            if (isFolia) {
+                FoliaHelper.cancelTask(keyallTask);
+            } else if (keyallTask instanceof BukkitTask) {
+                ((BukkitTask) keyallTask).cancel();
+            }
         }
-        // Menggunakan Scheduler Bukkit Standar (Universal untuk Spigot, Paper, Purpur)
-        keyallTask = Bukkit.getScheduler().runTaskTimer(this, () -> {
+
+        Runnable timerLogic = () -> {
             if (System.currentTimeMillis() >= nextKeyallTime) {
                 runKeyAll();
             }
-        }, 20L, 20L);
+        };
+
+        if (isFolia) {
+            keyallTask = FoliaHelper.startTimer(this, timerLogic);
+        } else {
+            keyallTask = Bukkit.getScheduler().runTaskTimer(this, timerLogic, 20L, 20L);
+        }
     }
 
     public void runKeyAll() {
